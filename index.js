@@ -2,12 +2,9 @@
 var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through');
+var tildify = require('tildify');
 var prop = gutil.colors.blue;
 var header = gutil.colors.underline;
-
-function tildify(path) {
-	return path.replace(/^\/Users\/\w+\//, '~/');
-}
 
 module.exports = function (options) {
 	return through(function (file) {
