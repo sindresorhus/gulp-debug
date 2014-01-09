@@ -3,6 +3,7 @@ var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through');
 var tildify = require('tildify');
+var dateTime = require('date-time');
 var prop = gutil.colors.blue;
 var header = gutil.colors.underline;
 
@@ -12,8 +13,6 @@ module.exports = function (options) {
 			return this.emit('error', new gutil.PluginError('gulp-debug', 'Streaming not supported'));
 		}
 
-		var nowDateTime = (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, '') + ' UTC';
-
 		var fileObj =
 			(file.cwd ? 'cwd:      ' + prop(tildify(file.cwd)) : '') +
 			(file.base ? '\nbase:     ' + prop(tildify(file.base)) : '') +
@@ -22,7 +21,7 @@ module.exports = function (options) {
 			(file.contents ? '\ncontents: ' + prop(file.contents.toString('utf8', 0, 40).trim() + '...\n') : '');
 
 		gutil.log(
-			'gulp-debug: ' + gutil.colors.gray('(' + nowDateTime + ')') + '\n\n' +
+			'gulp-debug: ' + gutil.colors.gray('(' + dateTime() + ')') + '\n\n' +
 			header('File\n') + fileObj
 		);
 
