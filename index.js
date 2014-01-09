@@ -26,5 +26,8 @@ module.exports = function (options) {
 		);
 
 		this.queue(file);
+	}, function () {
+		gutil.log('gulp-debug: ' + gutil.colors.magenta('end') + ' event fired ' + gutil.colors.gray('(' + dateTime() + ')'));
+		this.queue(null);
 	});
 };
