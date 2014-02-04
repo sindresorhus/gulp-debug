@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 var assert = require('assert');
 var gutil = require('gulp-util');
 var debug = require('./index');
@@ -19,8 +20,7 @@ it('should output debug info', function (cb) {
 
 	stream.write(new gutil.File({
 		path: 'foo.js',
+		stat: fs.statSync('test.js'),
 		contents: new Buffer('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
 	}));
-
-	stream.end();
 });

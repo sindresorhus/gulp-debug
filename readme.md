@@ -22,10 +22,27 @@ var debug = require('gulp-debug');
 
 gulp.task('default', function () {
 	gulp.src('foo.js')
-		.pipe(debug())
+		.pipe(debug({verbose: true}))
 		.pipe(gulp.dest('dist'));
 });
 ```
+
+
+## API
+
+### debug(options)
+
+#### options
+
+##### verbose
+
+Type: `Boolean`  
+Default: `false`
+
+Show more debugging:
+
+- the file [stat object](http://nodejs.org/api/fs.html#fs_class_fs_stats)
+- shows more of the contents, from 40 bytes to 400 bytes
 
 
 ## License
