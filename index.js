@@ -5,8 +5,9 @@ var through = require('through2');
 var tildify = require('tildify');
 var dateTime = require('date-time');
 var stringifyObject = require('stringify-object');
-var prop = gutil.colors.blue;
-var header = gutil.colors.underline;
+var chalk = require('chalk');
+var prop = chalk.blue;
+var header = chalk.underline;
 
 module.exports = function (options) {
 	options = options || {};
@@ -29,14 +30,14 @@ module.exports = function (options) {
 			(file.contents ? '\ncontents: ' + prop(trim(file.contents)) : '');
 
 		gutil.log(
-			'gulp-debug: ' + gutil.colors.gray('(' + dateTime() + ')') + '\n\n' +
+			'gulp-debug: ' + chalk.gray('(' + dateTime() + ')') + '\n\n' +
 			header('File\n') + fileObj
 		);
 
 		this.push(file);
 		cb();
 	}, function (cb) {
-		gutil.log('gulp-debug: ' + gutil.colors.magenta('end') + ' event fired ' + gutil.colors.gray('(' + dateTime() + ')'));
+		gutil.log('gulp-debug: ' + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
 		cb();
 	});
 };
