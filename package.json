@@ -1,6 +1,6 @@
 {
   "name": "gulp-debug",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Debug vinyl file streams",
   "license": "MIT",
   "repository": "sindresorhus/gulp-debug",
