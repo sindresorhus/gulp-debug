@@ -1,4 +1,4 @@
-# [gulp](https://github.com/wearefractal/gulp)-debug [![Build Status](https://secure.travis-ci.org/sindresorhus/gulp-debug.png?branch=master)](http://travis-ci.org/sindresorhus/gulp-debug)
+# [gulp](http://gulpjs.com)-debug [![Build Status](https://travis-ci.org/sindresorhus/gulp-debug.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-debug)
 
 > Debug [vinyl](https://github.com/wearefractal/vinyl) file streams
 
@@ -7,14 +7,12 @@
 
 ## Install
 
-Install with [npm](https://npmjs.org/package/gulp-debug)
-
-```
-npm install --save-dev gulp-debug
+```bash
+$ npm install --save-dev gulp-debug
 ```
 
 
-## Example
+## Usage
 
 ```js
 var gulp = require('gulp');
@@ -34,6 +32,13 @@ gulp.task('default', function () {
 
 #### options
 
+##### title
+
+Type: `string`  
+Default: ''
+
+Give it a title so it's possible to distinguish the output of multiple instances logging at once.
+
 ##### verbose
 
 Type: `Boolean`  
@@ -47,4 +52,4 @@ Show more debugging:
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)

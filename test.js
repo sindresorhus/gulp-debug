@@ -6,7 +6,7 @@ var debug = require('./index');
 var out = process.stdout.write.bind(process.stdout);
 
 it('should output debug info', function (cb) {
-	var stream = debug();
+	var stream = debug({title: 'unicorn'});
 
 	process.stdout.write = function (str) {
 		out(str);
@@ -19,7 +19,9 @@ it('should output debug info', function (cb) {
 	};
 
 	stream.write(new gutil.File({
-		path: 'foo.js',
+		cwd: __dirname,
+		base: __dirname,
+		path: __dirname + '/foo.js',
 		stat: fs.statSync('test.js'),
 		contents: new Buffer('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
 	}));

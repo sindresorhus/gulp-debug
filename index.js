@@ -12,6 +12,8 @@ var header = chalk.underline;
 module.exports = function (options) {
 	options = options || {};
 
+	var title = options.title ? options.title + ' ' : '';
+
 	return through.obj(function (file, enc, cb) {
 		if (file.isStream()) {
 			this.emit('error', new gutil.PluginError('gulp-debug', 'Streaming not supported'));
@@ -30,14 +32,14 @@ module.exports = function (options) {
 			(file.contents ? '\ncontents: ' + prop(trim(file.contents)) : '');
 
 		gutil.log(
-			'gulp-debug: ' + chalk.gray('(' + dateTime() + ')') + '\n\n' +
+			'gulp-debug: ' + title + chalk.gray('(' + dateTime() + ')') + '\n\n' +
 			header('File\n') + fileObj
 		);
 
 		this.push(file);
 		cb();
 	}, function (cb) {
-		gutil.log('gulp-debug: ' + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
+		gutil.log('gulp-debug: ' + title + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
 		cb();
 	});
 };
