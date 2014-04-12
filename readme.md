@@ -19,7 +19,7 @@ var gulp = require('gulp');
 var debug = require('gulp-debug');
 
 gulp.task('default', function () {
-	gulp.src('foo.js')
+	return gulp.src('foo.js')
 		.pipe(debug({verbose: true}))
 		.pipe(gulp.dest('dist'));
 });
