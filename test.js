@@ -1,28 +1,59 @@
+/* global describe, it, beforeEach, afterEach */
 'use strict';
 var fs = require('fs');
 var assert = require('assert');
+var sinon = require('sinon');
 var gutil = require('gulp-util');
-var debug = require('./index');
-var out = process.stdout.write.bind(process.stdout);
+var proxyquire = require('proxyquire');
+var gutilStub = {
+	log: function() {
+		gutil.log.apply(gutil.log, arguments);
+	}
+};
+var debug = proxyquire('./index', {
+	'gulp-util': gutilStub
+});
+//var out = process.stdout.write.bind(process.stdout);
 
-it('should output debug info', function (cb) {
-	var stream = debug({title: 'unicorn'});
+describe('gulp-debug', function() {
+	var file;
 
-	process.stdout.write = function (str) {
-		out(str);
+	beforeEach(function () {
+		sinon.spy(gutilStub, 'log');
+		file = new gutil.File({
+			cwd: __dirname,
+			base: __dirname,
+			path: __dirname + '/foo.js',
+			stat: fs.statSync('test.js'),
+			contents: new Buffer('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
+		});
+	});
 
-		if (/contents/.test(str)) {
-			assert(true);
-			process.stdout.write = out;
+	afterEach(function () {
+		gutilStub.log.restore();
+	});
+
+	it('should output debug info', function (cb) {
+		var stream = debug({title: 'unicorn'});
+
+		stream.write(file, 'utf8', function() {
+			assert(gutilStub.log.calledOnce);
+			assert(/contents/.test('' + gutilStub.log.firstCall.args));
 			cb();
-		}
-	};
+		});
+	});
 
-	stream.write(new gutil.File({
-		cwd: __dirname,
-		base: __dirname,
-		path: __dirname + '/foo.js',
-		stat: fs.statSync('test.js'),
-		contents: new Buffer('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
-	}));
+	it('should use the transformation function if given', function (done) {
+		var stream = debug({
+			transform: function (file) {
+				return 'moo: ' + file.path;
+			}
+		});
+
+		stream.write(file, 'utf8', function() {
+			assert(gutilStub.log.calledOnce);
+			assert(new RegExp('moo: ' + file.path.replace('/', '\\/')).test('' + gutilStub.log.firstCall.args));
+			done();
+		});
+	});
 });
