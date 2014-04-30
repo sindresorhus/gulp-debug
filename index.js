@@ -1,5 +1,4 @@
 'use strict';
-var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through2');
 var tildify = require('tildify');

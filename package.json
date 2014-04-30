@@ -39,6 +39,9 @@
     "chalk": "^0.4.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "proxyquire": "^0.6.0",
+    "sinon": "^1.9.1",
+    "strip-ansi": "~0.2.1"
   }
 }
