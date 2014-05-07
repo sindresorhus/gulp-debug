@@ -10,7 +10,9 @@ var tildify = require('tildify');
 
 var gutilStub = {
 	log: function() {
-		//gutil.log.apply(gutil.log, arguments);
+		// uncomment the next line to see the log messages written by gulp-debug
+		// during test (by default they are swallowed by the sinon stub replacing the log method)
+		// gutil.log.apply(gutil.log, arguments);
 	}
 };
 var debug = proxyquire('./index', {
