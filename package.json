@@ -36,7 +36,8 @@
     "tildify": "^0.1.0",
     "date-time": "^0.1.0",
     "stringify-object": "^0.2.0",
-    "chalk": "^0.4.0"
+    "chalk": "^0.4.0",
+    "extend": "^1.2.1"
   },
   "devDependencies": {
     "mocha": "*",
