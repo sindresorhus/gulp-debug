@@ -4,14 +4,29 @@ var through = require('through2');
 var tildify = require('tildify');
 var dateTime = require('date-time');
 var stringifyObject = require('stringify-object');
+var extend = require('extend');
 var chalk = require('chalk');
 var prop = chalk.blue;
 var header = chalk.underline;
 
 module.exports = function (options) {
 	options = options || {};
-
-	var title = options.title ? options.title + ' ' : '';
+	var defaultColors = {
+		'title' : 'white',
+		'propName' : 'white',
+		'propVal' : 'white',
+		'endLine' : 'white'
+	};
+	
+	var title = options.title ? options.title + ' ' : '',
+		colors = extend(defaultColors, options.colors),
+		chalkColor = function(color){
+			if(color in chalk){
+				return chalk[color]
+			} else {
+				gutil.log('only chalk colors available!! ' + color + 'isn\'t available ');
+			}
+		};
 
 	return through.obj(function (file, enc, cb) {
 		if (file.isStream()) {
@@ -24,21 +39,21 @@ module.exports = function (options) {
 		}
 
 		var fileObj =
-			(file.cwd ? 'cwd:      ' + prop(tildify(file.cwd)) : '') +
-			(file.base ? '\nbase:     ' + prop(tildify(file.base)) : '') +
-			(file.path ? '\npath:     ' + prop(tildify(file.path)) : '') +
-			(file.stat && options.verbose ? '\nstat:     ' + prop(stringifyObject(file.stat)) : '') +
-			(file.contents ? '\ncontents: ' + prop(trim(file.contents)) : '');
+			(file.cwd ? chalkColor(colors.propName)('cwd:      ') + chalkColor(colors.propVal)(tildify(file.cwd)) : '') +
+			(file.base ? chalkColor(colors.propName)('\nbase:     ') + chalkColor(colors.propVal)(tildify(file.base)) : '') +
+			(file.path ? chalkColor(colors.propName)('\npath:     ') + chalkColor(colors.propVal)(tildify(file.path)) : '') +
+			(file.stat && options.verbose ? chalkColor(colors.propName)('\nstat:     ') + chalkColor(colors.propVal)(stringifyObject(file.stat)) : '') +
+			(file.contents ? chalkColor(colors.propName)('\ncontents: ') + chalkColor(colors.propVal)(trim(file.contents)) : '');
 
 		gutil.log(
-			'gulp-debug: ' + title + chalk.gray('(' + dateTime() + ')') + '\n\n' +
+			chalkColor(colors.title)('gulp-debug: ' + title + '(' + dateTime() + ')') + '\n\n' +
 			header('File\n') + fileObj
 		);
 
 		this.push(file);
 		cb();
 	}, function (cb) {
-		gutil.log('gulp-debug: ' + title + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
+		gutil.log(chalkColor(colors.endLine)('gulp-debug: ' + title + 'end' + ' event fired ' + '(' + dateTime() + ')'));
 		cb();
 	});
 };
