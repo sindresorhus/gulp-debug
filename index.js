@@ -15,8 +15,8 @@ module.exports = function (options) {
 
 	return through.obj(function (file, enc, cb) {
 		if (file.isStream()) {
-			this.emit('error', new gutil.PluginError('gulp-debug', 'Streaming not supported'));
-			return cb();
+			cb(new gutil.PluginError('gulp-debug', 'Streaming not supported'));
+			return;
 		}
 
 		var trim = function (buf) {
@@ -35,8 +35,7 @@ module.exports = function (options) {
 			header('File\n') + fileObj
 		);
 
-		this.push(file);
-		cb();
+		cb(null, file);
 	}, function (cb) {
 		gutil.log('gulp-debug: ' + title + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
 		cb();

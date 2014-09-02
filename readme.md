@@ -7,7 +7,7 @@
 
 ## Install
 
-```bash
+```sh
 $ npm install --save-dev gulp-debug
 ```
 
@@ -41,7 +41,7 @@ Give it a title so it's possible to distinguish the output of multiple instances
 
 ##### verbose
 
-Type: `Boolean`  
+Type: `boolean`  
 Default: `false`
 
 Show more debugging:
@@ -52,4 +52,4 @@ Show more debugging:
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](http://sindresorhus.com)

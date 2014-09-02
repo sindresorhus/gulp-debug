@@ -32,16 +32,16 @@
   ],
   "dependencies": {
     "chalk": "^0.5.1",
-    "date-time": "^0.1.0",
+    "date-time": "^1.0.0",
     "gulp-util": "^3.0.0",
-    "stringify-object": "^0.2.0",
-    "through2": "^0.5.1",
-    "tildify": "^0.2.0"
+    "stringify-object": "^1.0.0",
+    "through2": "^0.6.1",
+    "tildify": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "*",
     "proxyquire": "^1.0.1",
     "sinon": "^1.9.1",
-    "strip-ansi": "^1.0.0"
+    "strip-ansi": "^2.0.0"
   }
 }
