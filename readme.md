@@ -49,6 +49,20 @@ Show more debugging:
 - the file [stat object](http://nodejs.org/api/fs.html#fs_class_fs_stats)
 - shows more of the contents, from 40 bytes to 400 bytes
 
+##### minimal
+
+Type: `boolean`
+Default: `false`
+
+Instead of the full view, only log the path. Also, suppress the 'end' event report.
+
+##### count
+
+Type: `boolean`
+Default: `false`
+
+Show a count of total files processed at the end of the stream.
+
 
 ## License
 
