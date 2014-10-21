@@ -43,7 +43,7 @@ it('should output debug info', function (cb) {
 		assert(gutilStub.log.calledOnce);
 
 		var lines = stripAnsi(gutilStub.log.firstCall.args[0]).split('\n');
-		assert(/^gulp-debug: unicorn \(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC\)$/.test(lines.shift()));
+		assert(/^unicorn \(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC\)$/.test(lines.shift()));
 		var expected = [
 			'',
 			'File',
