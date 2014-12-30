@@ -1,4 +1,4 @@
-# [gulp](http://gulpjs.com)-debug [![Build Status](https://travis-ci.org/sindresorhus/gulp-debug.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-debug)
+# gulp-debug [![Build Status](https://travis-ci.org/sindresorhus/gulp-debug.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-debug)
 
 > Debug [vinyl](https://github.com/wearefractal/vinyl) file streams
 
@@ -20,7 +20,7 @@ var debug = require('gulp-debug');
 
 gulp.task('default', function () {
 	return gulp.src('foo.js')
-		.pipe(debug({verbose: true}))
+		.pipe(debug({title: 'unicorn:'}))
 		.pipe(gulp.dest('dist'));
 });
 ```
@@ -35,19 +35,18 @@ gulp.task('default', function () {
 ##### title
 
 Type: `string`  
-Default: ''
+Default: `'gulp-debug:'`
 
-Give it a title so it's possible to distinguish the output of multiple instances logging at once.
+Give it a custom title so it's possible to distinguish the output of multiple instances logging at once.
 
-##### verbose
+##### minimal
 
 Type: `boolean`  
-Default: `false`
+Default: `true`
 
-Show more debugging:
+By default only relative paths are shown. Turn off minimal mode to also show `cwd`, `base`, `path`.
 
-- the file [stat object](http://nodejs.org/api/fs.html#fs_class_fs_stats)
-- shows more of the contents, from 40 bytes to 400 bytes
+The [`stat` property](http://nodejs.org/api/fs.html#fs_class_fs_stats) will be shown when you run gulp in verbose mode: `gulp --verbose`.
 
 
 ## License

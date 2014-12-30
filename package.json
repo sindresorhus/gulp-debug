@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha"
   },
   "files": [
     "index.js"
@@ -32,13 +32,14 @@
   ],
   "dependencies": {
     "chalk": "^0.5.1",
-    "date-time": "^1.0.0",
     "gulp-util": "^3.0.0",
+    "object-assign": "^2.0.0",
     "stringify-object": "^1.0.0",
     "through2": "^0.6.1",
     "tildify": "^1.0.0"
   },
   "devDependencies": {
+    "gulp": "^3.8.10",
     "mocha": "*",
     "proxyquire": "^1.0.1",
     "sinon": "^1.9.1",

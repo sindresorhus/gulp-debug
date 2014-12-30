@@ -1,43 +1,44 @@
 'use strict';
+var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through2');
 var tildify = require('tildify');
-var dateTime = require('date-time');
 var stringifyObject = require('stringify-object');
 var chalk = require('chalk');
+var objectAssign = require('object-assign');
 var prop = chalk.blue;
-var header = chalk.underline;
 
-module.exports = function (options) {
-	options = options || {};
+module.exports = function (opts) {
+	opts = objectAssign({
+		title: 'gulp-debug:',
+		minimal: true
+	}, opts);
 
-	var title = options.title ? options.title + ' ' : '';
+	if (process.argv.indexOf('--verbose') !== -1) {
+		opts.verbose = true;
+		opts.minimal = false;
+	}
+
+	var count = 0;
 
 	return through.obj(function (file, enc, cb) {
-		if (file.isStream()) {
-			cb(new gutil.PluginError('gulp-debug', 'Streaming not supported'));
-			return;
-		}
+		var full =
+			'\n' +
+			(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
+			(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
+			(file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
+			(file.stat && opts.verbose ? '\nstat:' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trimRight()) : '') +
+			'\n';
 
-		var trim = function (buf) {
-			return buf.toString('utf8', 0, options.verbose ? 1000 : 40).trim() + '...\n';
-		}
+		var output = opts.minimal ? prop(tildify(path.relative(process.cwd(), file.path))) : full;
 
-		var fileObj =
-			(file.cwd ? 'cwd:      ' + prop(tildify(file.cwd)) : '') +
-			(file.base ? '\nbase:     ' + prop(tildify(file.base)) : '') +
-			(file.path ? '\npath:     ' + prop(tildify(file.path)) : '') +
-			(file.stat && options.verbose ? '\nstat:     ' + prop(stringifyObject(file.stat)) : '') +
-			(file.contents ? '\ncontents: ' + prop(trim(file.contents)) : '');
+		count++;
 
-		gutil.log(
-			'gulp-debug: ' + title + chalk.gray('(' + dateTime() + ')') + '\n\n' +
-			header('File\n') + fileObj
-		);
+		gutil.log(opts.title + ' ' + output);
 
 		cb(null, file);
 	}, function (cb) {
-		gutil.log('gulp-debug: ' + title + chalk.magenta('end') + ' event fired ' + chalk.gray('(' + dateTime() + ')'));
+		gutil.log(opts.title + ' ' + chalk.green(count + ' items'));
 		cb();
 	});
 };

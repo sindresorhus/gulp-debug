@@ -5,7 +5,6 @@ var sinon = require('sinon');
 var gutil = require('gulp-util');
 var proxyquire = require('proxyquire');
 var stripAnsi = require('strip-ansi');
-var tildify = require('tildify');
 
 var gutilStub = {
 	log: function () {
@@ -37,23 +36,11 @@ afterEach(function () {
 });
 
 it('should output debug info', function (cb) {
-	var stream = debug({title: 'unicorn'});
+	var stream = debug({title: 'unicorn:'});
 
 	stream.write(file, 'utf8', function () {
 		assert(gutilStub.log.calledOnce);
-
-		var lines = stripAnsi(gutilStub.log.firstCall.args[0]).split('\n');
-		assert(/^gulp-debug: unicorn \(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC\)$/.test(lines.shift()));
-		var expected = [
-			'',
-			'File',
-			'cwd:      ' + tildify(file.cwd),
-			'base:     ' + tildify(file.base),
-			'path:     ' + tildify(file.path),
-			'contents: Lorem ipsum dolor sit amet, consectetuer...',
-			''
-		];
-		assert.deepEqual(lines, expected);
+		assert.strictEqual(stripAnsi(gutilStub.log.firstCall.args[0]).split('\n')[0],  'unicorn: foo.js');
 		cb();
 	});
 });
