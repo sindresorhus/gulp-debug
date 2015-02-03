@@ -1,13 +1,13 @@
 # gulp-debug [![Build Status](https://travis-ci.org/sindresorhus/gulp-debug.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-debug)
 
-> Debug [vinyl](https://github.com/wearefractal/vinyl) file streams
+> Debug [vinyl](https://github.com/wearefractal/vinyl) file streams to see what files are run through your gulp pipeline
 
 ![](screenshot.png)
 
 
 ## Install
 
-```sh
+```
 $ npm install --save-dev gulp-debug
 ```
 
