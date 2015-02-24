@@ -31,7 +31,7 @@
     "fs"
   ],
   "dependencies": {
-    "chalk": "^0.5.1",
+    "chalk": "^1.0.0",
     "gulp-util": "^3.0.0",
     "object-assign": "^2.0.0",
     "stringify-object": "^1.0.0",
