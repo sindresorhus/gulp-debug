@@ -11,7 +11,8 @@ var prop = chalk.blue;
 module.exports = function (opts) {
 	opts = objectAssign({
 		title: 'gulp-debug:',
-		minimal: true
+		minimal: true,
+		zeroItems: true
 	}, opts);
 
 	if (process.argv.indexOf('--verbose') !== -1) {
@@ -38,7 +39,9 @@ module.exports = function (opts) {
 
 		cb(null, file);
 	}, function (cb) {
-		gutil.log(opts.title + ' ' + chalk.green(count + ' items'));
+		if ( opts.zeroItems === true || count !== 0 ) {
+			gutil.log(opts.title + ' ' + chalk.green(count + ' items'));
+		}
 		cb();
 	});
 };
