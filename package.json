@@ -1,6 +1,6 @@
 {
   "name": "gulp-debug",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Debug vinyl file streams to see what files are run through your gulp pipeline",
   "license": "MIT",
   "repository": "sindresorhus/gulp-debug",
