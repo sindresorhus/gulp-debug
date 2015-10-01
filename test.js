@@ -44,3 +44,42 @@ it('should output debug info', function (cb) {
 		cb();
 	});
 });
+
+it('should output singular item count', function (cb) {
+	var stream = debug({title: 'unicorn:'});
+
+	stream.on('finish', function () {
+		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0],  'unicorn: 1 item');
+		cb();
+	});
+
+	stream.write(file, 'utf8', function () {
+		stream.end();
+	});
+});
+
+it('should output zero item count', function (cb) {
+	var stream = debug({title: 'unicorn:'});
+
+	stream.on('finish', function () {
+		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0],  'unicorn: 0 items');
+		cb();
+	});
+	
+	stream.end();
+});
+
+it('should output plural item count', function (cb) {
+	var stream = debug({title: 'unicorn:'});
+
+	stream.on('finish', function () {
+		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0],  'unicorn: 2 items');
+		cb();
+	});
+
+	stream.write(file, 'utf8', function () {
+		stream.write(file, 'utf8', function () {
+			stream.end();
+		});
+	});
+});
