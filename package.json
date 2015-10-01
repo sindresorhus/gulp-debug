@@ -34,6 +34,7 @@
     "chalk": "^1.0.0",
     "gulp-util": "^3.0.0",
     "object-assign": "^3.0.0",
+    "plur": "^2.0.0",
     "stringify-object": "^2.3.0",
     "through2": "^2.0.0",
     "tildify": "^1.0.0"

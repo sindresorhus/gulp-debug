@@ -6,6 +6,7 @@ var tildify = require('tildify');
 var stringifyObject = require('stringify-object');
 var chalk = require('chalk');
 var objectAssign = require('object-assign');
+var plur = require('plur');
 var prop = chalk.blue;
 
 module.exports = function (opts) {
@@ -38,9 +39,7 @@ module.exports = function (opts) {
 
 		cb(null, file);
 	}, function (cb) {
-		var plural = count != 1;
-		var itemsLabel = plural ? ' items' : ' item';
-		gutil.log(opts.title + ' ' + chalk.green(count + itemsLabel));
+		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		cb();
 	});
 };
