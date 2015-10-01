@@ -38,7 +38,9 @@ module.exports = function (opts) {
 
 		cb(null, file);
 	}, function (cb) {
-		gutil.log(opts.title + ' ' + chalk.green(count + ' items'));
+		var plural = count != 1;
+		var itemsLabel = plural ? ' items' : ' item';
+		gutil.log(opts.title + ' ' + chalk.green(count + itemsLabel));
 		cb();
 	});
 };
