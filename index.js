@@ -30,7 +30,7 @@ module.exports = function (opts) {
 			(file.stat && opts.verbose ? '\nstat:' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trimRight()) : '') +
 			'\n';
 
-		var output = opts.minimal ? prop(tildify(path.relative(process.cwd(), file.path))) : full;
+		var output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
 		count++;
 
