@@ -26,12 +26,14 @@ module.exports = function (opts) {
 		var full =
 			'\n' +
 			(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
+			'\nprocess.cwd: ' + prop(process.cwd()) +
+			(file.relative ? '\nrelative:   ' + prop(tildify(file.relative)) : '') +
 			(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
 			(file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
 			(file.stat && opts.verbose ? '\nstat:' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trimRight()) : '') +
 			'\n';
 
-		var output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
+		var output = opts.minimal ? prop(file.relative) : full;
 
 		count++;
 
