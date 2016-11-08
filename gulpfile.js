@@ -1,7 +1,8 @@
 'use strict';
-var gulp = require('gulp');
-var debug = require('./');
+const gulp = require('gulp');
+const debug = require('./');
 
-gulp.task('default', function () {
-	return gulp.src('*').pipe(debug());
-});
+gulp.task('default', () =>
+	gulp.src('*')
+		.pipe(debug())
+);

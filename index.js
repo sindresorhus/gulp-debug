@@ -1,16 +1,16 @@
 'use strict';
-var path = require('path');
-var gutil = require('gulp-util');
-var through = require('through2');
-var tildify = require('tildify');
-var stringifyObject = require('stringify-object');
-var chalk = require('chalk');
-var objectAssign = require('object-assign');
-var plur = require('plur');
-var prop = chalk.blue;
+const path = require('path');
+const gutil = require('gulp-util');
+const through = require('through2');
+const tildify = require('tildify');
+const stringifyObject = require('stringify-object');
+const chalk = require('chalk');
+const plur = require('plur');
 
-module.exports = function (opts) {
-	opts = objectAssign({
+const prop = chalk.blue;
+
+module.exports = opts => {
+	opts = Object.assign({
 		title: 'gulp-debug:',
 		minimal: true
 	}, opts);
@@ -20,10 +20,10 @@ module.exports = function (opts) {
 		opts.minimal = false;
 	}
 
-	var count = 0;
+	let count = 0;
 
-	return through.obj(function (file, enc, cb) {
-		var full =
+	return through.obj((file, enc, cb) => {
+		const full =
 			'\n' +
 			(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
 			(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
@@ -31,14 +31,14 @@ module.exports = function (opts) {
 			(file.stat && opts.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
 			'\n';
 
-		var output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
+		const output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
 		count++;
 
 		gutil.log(opts.title + ' ' + output);
 
 		cb(null, file);
-	}, function (cb) {
+	}, cb => {
 		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		cb();
 	});
