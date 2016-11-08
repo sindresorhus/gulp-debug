@@ -28,7 +28,7 @@ module.exports = function (opts) {
 			(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
 			(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
 			(file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
-			(file.stat && opts.verbose ? '\nstat:' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trimRight()) : '') +
+			(file.stat && opts.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
 			'\n';
 
 		var output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
