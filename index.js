@@ -12,7 +12,8 @@ const prop = chalk.blue;
 module.exports = opts => {
 	opts = Object.assign({
 		title: 'gulp-debug:',
-		minimal: true
+		minimal: true,
+		log: gutil.log
 	}, opts);
 
 	if (process.argv.indexOf('--verbose') !== -1) {
@@ -35,11 +36,11 @@ module.exports = opts => {
 
 		count++;
 
-		gutil.log(opts.title + ' ' + output);
+		opts.log(opts.title + ' ' + output);
 
 		cb(null, file);
 	}, cb => {
-		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+		opts.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		cb();
 	});
 };
