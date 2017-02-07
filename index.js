@@ -25,21 +25,21 @@ module.exports = opts => {
 	let count = 0;
 
 	return through.obj((file, enc, cb) => {
-    if(opts.files){
-      const full =
-        '\n' +
-        (file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
-        (file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
-        (file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
-        (file.stat && opts.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
-        '\n';
+		if(opts.files){
+			const full =
+			  '\n' +
+			  (file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
+			  (file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
+			  (file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
+			  (file.stat && opts.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
+			  '\n';
 
-      const output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
+			const output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
-      gutil.log(opts.title + ' ' + output);
-    }
+			gutil.log(opts.title + ' ' + output);
+		}
 
-    count++;
+		count++;
 		cb(null, file);
 	}, cb => {
 		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
