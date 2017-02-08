@@ -13,19 +13,19 @@ module.exports = opts => {
 	opts = Object.assign({
 		title: 'gulp-debug:',
 		minimal: true,
-		files: true
+		showFiles: true
 	}, opts);
 
 	if (process.argv.indexOf('--verbose') !== -1) {
 		opts.verbose = true;
 		opts.minimal = false;
-		opts.files = true;
+		opts.showFiles = true;
 	}
 
 	let count = 0;
 
 	return through.obj((file, enc, cb) => {
-		if (opts.files) {
+		if (opts.showFiles) {
 			const full =
 				'\n' +
 				(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +

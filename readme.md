@@ -48,12 +48,12 @@ By default only relative paths are shown. Turn off minimal mode to also show `cw
 
 The [`stat` property](http://nodejs.org/api/fs.html#fs_class_fs_stats) will be shown when you run gulp in verbose mode: `gulp --verbose`.
 
-##### files
+##### showFiles
 
 Type: `boolean`
 Default: `true`
 
-By default all files in the stream are printed. Setting this to false will only show the count of files in the stream.
+Setting this to false will skip printing the file names and only show file counts.
 
 ## License
 

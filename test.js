@@ -85,3 +85,17 @@ it('should output plural item count', cb => {
 		});
 	});
 });
+
+it('should not output file names when `showFiles` is false.', cb => {
+	const stream = debug({title: 'unicorn:', showFiles: false});
+
+	stream.on('finish', () => {
+		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
+		cb();
+	});
+
+	stream.write(file, () => {
+		assert(gutilStub.log.notCalled);
+		stream.end();
+	});
+});
