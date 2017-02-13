@@ -34,20 +34,26 @@ gulp.task('default', function () {
 
 ##### title
 
-Type: `string`  
+Type: `string`
 Default: `'gulp-debug:'`
 
 Give it a custom title so it's possible to distinguish the output of multiple instances logging at once.
 
 ##### minimal
 
-Type: `boolean`  
+Type: `boolean`
 Default: `true`
 
 By default only relative paths are shown. Turn off minimal mode to also show `cwd`, `base`, `path`.
 
 The [`stat` property](http://nodejs.org/api/fs.html#fs_class_fs_stats) will be shown when you run gulp in verbose mode: `gulp --verbose`.
 
+##### showFiles
+
+Type: `boolean`
+Default: `true`
+
+Setting this to false will skip printing the file names and only show file counts.
 
 ## License
 
