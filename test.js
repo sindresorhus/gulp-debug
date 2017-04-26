@@ -1,101 +1,95 @@
-/* eslint-env mocha */
-'use strict';
-const fs = require('fs');
-const path = require('path');
-const assert = require('assert');
-const sinon = require('sinon');
-const gutil = require('gulp-util');
-const proxyquire = require('proxyquire');
-const stripAnsi = require('strip-ansi');
+import fs from 'fs';
+import path from 'path';
+import test from 'ava';
+import sinon from 'sinon';
+import gutil from 'gulp-util';
+import proxyquire from 'proxyquire';
+import stripAnsi from 'strip-ansi';
+import pEvent from 'p-event';
 
 const gutilStub = {
 	log() {
-		// uncomment the next line to see the log messages written by gulp-debug
-		// during test (by default they are swallowed by the sinon stub replacing the log method)
+		// Uncomment the next line to see the log messages written by `gulp-debug` during test
+		// (by default they are swallowed by the sinon stub replacing the log method)
 		// gutil.log.apply(gutil.log, arguments);
 	}
 };
 
-const debug = proxyquire('./', {
+const debug = proxyquire('.', {
 	'gulp-util': gutilStub
 });
 
 let file;
 
-beforeEach(() => {
+test.beforeEach(() => {
 	sinon.spy(gutilStub, 'log');
+
 	file = new gutil.File({
 		cwd: __dirname,
 		base: __dirname,
 		path: path.join(__dirname, 'foo.js'),
 		stat: fs.statSync('test.js'),
-		contents: new Buffer('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
+		contents: Buffer.from('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
 	});
 });
 
-afterEach(() => {
+test.afterEach(() => {
 	gutilStub.log.restore();
 });
 
-it('should output debug info', cb => {
+test('output debug info', async t => {
 	const stream = debug({title: 'unicorn:'});
+	const finish = pEvent(stream, 'finish');
+	stream.end(file);
+	await finish;
 
-	stream.write(file, 'utf8', () => {
-		assert(gutilStub.log.calledOnce);
-		assert.strictEqual(stripAnsi(gutilStub.log.firstCall.args[0]).split('\n')[0], 'unicorn: foo.js');
-		cb();
-	});
+	t.is(stripAnsi(gutilStub.log.firstCall.args[0]).split('\n')[0], 'unicorn: foo.js');
 });
 
-it('should output singular item count', cb => {
+test('output singular item count', async t => {
 	const stream = debug({title: 'unicorn:'});
+	const finish = pEvent(stream, 'finish');
+	stream.end(file);
+	await finish;
 
-	stream.on('finish', () => {
-		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
-		cb();
-	});
-
-	stream.write(file, () => {
-		stream.end();
-	});
+	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });
 
-it('should output zero item count', cb => {
+test('output zero item count', async t => {
 	const stream = debug({title: 'unicorn:'});
-
-	stream.on('finish', () => {
-		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 0 items');
-		cb();
-	});
-
+	const finish = pEvent(stream, 'finish');
 	stream.end();
+	await finish;
+
+	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 0 items');
 });
 
-it('should output plural item count', cb => {
+test('output plural item count', async t => {
 	const stream = debug({title: 'unicorn:'});
-
-	stream.on('finish', () => {
-		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
-		cb();
-	});
+	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
-		stream.write(file, () => {
-			stream.end();
-		});
+		stream.end(file);
 	});
+
+	await finish;
+
+	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
 });
 
-it('should not output file names when `showFiles` is false.', cb => {
-	const stream = debug({title: 'unicorn:', showFiles: false});
-
-	stream.on('finish', () => {
-		assert.strictEqual(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
-		cb();
+test('not output file names when `showFiles` is false.', async t => {
+	const stream = debug({
+		title: 'unicorn:',
+		showFiles: false
 	});
+	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
-		assert(gutilStub.log.notCalled);
+		t.true(gutilStub.log.notCalled);
 		stream.end();
 	});
+
+	await finish;
+
+	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });

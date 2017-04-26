@@ -13,7 +13,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "xo && mocha"
+    "test": "xo && ava"
   },
   "files": [
     "index.js"
@@ -39,11 +39,15 @@
     "tildify": "^1.1.2"
   },
   "devDependencies": {
+    "ava": "*",
     "gulp": "^3.8.10",
-    "mocha": "*",
+    "p-event": "^1.0.0",
     "proxyquire": "^1.0.1",
-    "sinon": "^1.9.1",
+    "sinon": "^2.1.0",
     "strip-ansi": "^3.0.0",
     "xo": "*"
+  },
+  "ava": {
+    "serial": true
   }
 }
