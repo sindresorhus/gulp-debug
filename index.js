@@ -13,13 +13,15 @@ module.exports = opts => {
 	opts = Object.assign({
 		title: 'gulp-debug:',
 		minimal: true,
-		showFiles: true
+		showFiles: true,
+		showCount: true
 	}, opts);
 
 	if (process.argv.indexOf('--verbose') !== -1) {
 		opts.verbose = true;
 		opts.minimal = false;
 		opts.showFiles = true;
+		opts.showCount = true;
 	}
 
 	let count = 0;
@@ -42,7 +44,9 @@ module.exports = opts => {
 		count++;
 		cb(null, file);
 	}, cb => {
-		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+		if (opts.showCount) {
+			gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+		}
 		cb();
 	});
 };
