@@ -55,6 +55,12 @@ Default: `true`
 
 Setting this to false will skip printing the file names and only show the file count.
 
+##### showCount
+
+Type: `boolean`<br>
+Default: `true`
+
+Setting this to false will skip printing the file count.
 
 ## License
 
