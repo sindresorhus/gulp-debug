@@ -97,7 +97,7 @@ test('not output file names when `showFiles` is false.', async t => {
 test('not output count when `showCount` is false.', async t => {
 	const stream = debug({
 		title: 'unicorn:',
-		showCount: false
+		showFiles: false
 	});
 	const finish = pEvent(stream, 'finish');
 
@@ -108,5 +108,5 @@ test('not output count when `showCount` is false.', async t => {
 
 	await finish;
 
-	t.not(stripAnsi(gutilStub.log.lastCall.args[0].split('\n')[0], 'unicorn: 1 item');
+	t.not(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });
