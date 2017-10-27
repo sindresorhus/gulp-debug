@@ -102,8 +102,7 @@ test('not output count when `showCount` is false.', async t => {
 	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
-		t.true(gutilStub.log.notCalled);
-		stream.end();
+		stream.end(file);
 	});
 
 	await finish;
