@@ -97,7 +97,7 @@ test('not output file names when `showFiles` is false.', async t => {
 test('not output count when `showCount` is false.', async t => {
 	const stream = debug({
 		title: 'unicorn:',
-		showFiles: false
+		showCount: false
 	});
 	const finish = pEvent(stream, 'finish');
 
