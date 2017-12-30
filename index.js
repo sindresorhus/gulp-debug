@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const gutil = require('gulp-util');
+const fancyLog = require('fancy-log');
 const through = require('through2');
 const tildify = require('tildify');
 const stringifyObject = require('stringify-object');
@@ -36,13 +36,16 @@ module.exports = opts => {
 
 			const output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
-			gutil.log(opts.title + ' ' + output);
+			module.exports._log(opts.title + ' ' + output);
 		}
 
 		count++;
 		cb(null, file);
 	}, cb => {
-		gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+		module.exports._log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		cb();
 	});
 };
+
+// Internal: Log function used by gulp-debug exposed for testing.
+module.exports._log = fancyLog;
