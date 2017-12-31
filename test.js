@@ -2,29 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import sinon from 'sinon';
-import gutil from 'gulp-util';
-import proxyquire from 'proxyquire';
+import Vinyl from 'vinyl';
 import stripAnsi from 'strip-ansi';
 import pEvent from 'p-event';
+import debug from '.';
 
-const gutilStub = {
-	log() {
-		// Uncomment the next line to see the log messages written by `gulp-debug` during test
-		// (by default they are swallowed by the sinon stub replacing the log method)
-		// gutil.log.apply(gutil.log, arguments);
-	}
-};
-
-const debug = proxyquire('.', {
-	'gulp-util': gutilStub
-});
+const sandbox = sinon.sandbox.create();
 
 let file;
 
 test.beforeEach(() => {
-	sinon.spy(gutilStub, 'log');
+	sandbox.spy(debug, '_log');
 
-	file = new gutil.File({
+	file = new Vinyl({
 		cwd: __dirname,
 		base: __dirname,
 		path: path.join(__dirname, 'foo.js'),
@@ -34,7 +24,7 @@ test.beforeEach(() => {
 });
 
 test.afterEach(() => {
-	gutilStub.log.restore();
+	sandbox.restore();
 });
 
 test('output debug info', async t => {
@@ -43,7 +33,7 @@ test('output debug info', async t => {
 	stream.end(file);
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.firstCall.args[0]).split('\n')[0], 'unicorn: foo.js');
+	t.is(stripAnsi(debug._log.firstCall.args[0]).split('\n')[0], 'unicorn: foo.js');
 });
 
 test('output singular item count', async t => {
@@ -52,7 +42,7 @@ test('output singular item count', async t => {
 	stream.end(file);
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
+	t.is(stripAnsi(debug._log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });
 
 test('output zero item count', async t => {
@@ -61,7 +51,7 @@ test('output zero item count', async t => {
 	stream.end();
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 0 items');
+	t.is(stripAnsi(debug._log.lastCall.args[0]).split('\n')[0], 'unicorn: 0 items');
 });
 
 test('output plural item count', async t => {
@@ -74,7 +64,7 @@ test('output plural item count', async t => {
 
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
+	t.is(stripAnsi(debug._log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
 });
 
 test('not output file names when `showFiles` is false.', async t => {
@@ -85,11 +75,11 @@ test('not output file names when `showFiles` is false.', async t => {
 	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
-		t.true(gutilStub.log.notCalled);
+		t.true(debug._log.notCalled);
 		stream.end();
 	});
 
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
+	t.is(stripAnsi(debug._log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });
