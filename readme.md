@@ -32,6 +32,8 @@ gulp.task('default', () =>
 
 #### options
 
+Type: `Object`
+
 ##### title
 
 Type: `string`<br>
