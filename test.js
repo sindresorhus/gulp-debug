@@ -105,3 +105,14 @@ test('not output file names when `showFiles` is false.', async t => {
 
 	t.is(logInspect.lastMessage, 'unicorn: 1 item');
 });
+
+test('using the default logger', async t => {
+	const stream = debug();
+	const finish = pEvent(stream, 'finish');
+
+	stream.end(file);
+
+	await finish;
+
+	t.pass();
+});
