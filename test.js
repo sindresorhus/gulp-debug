@@ -109,9 +109,7 @@ test('not output file names when `showFiles` is false.', async t => {
 test('using the default logger', async t => {
 	const stream = debug();
 	const finish = pEvent(stream, 'finish');
-
 	stream.end(file);
-
 	await finish;
 
 	t.pass();
