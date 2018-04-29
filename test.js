@@ -88,7 +88,7 @@ test('output plural item count', async t => {
 	t.is(logInspect.lastMessage, 'unicorn: 2 items');
 });
 
-test('not output file names when `showFiles` is false.', async t => {
+test('do not output file names when `showFiles` is false', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
 		title: 'unicorn:',
@@ -113,4 +113,21 @@ test('using the default logger', async t => {
 	await finish;
 
 	t.pass();
+});
+
+test('do not output count when `showCount` is false', async t => {
+	const stream = debug({
+		logger: logInspect.logger,
+		title: 'unicorn:',
+		showCount: false
+	});
+	const finish = pEvent(stream, 'finish');
+
+	stream.write(file, () => {
+		stream.end(file);
+	});
+
+	await finish;
+
+	t.not(logInspect.lastMessage, 'unicorn: 1 item');
 });

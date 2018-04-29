@@ -55,7 +55,14 @@ The [`stat` property](http://nodejs.org/api/fs.html#fs_class_fs_stats) will be s
 Type: `boolean`<br>
 Default: `true`
 
-Setting this to false will skip printing the file names and only show the file count.
+Print filenames.
+
+##### showCount
+
+Type: `boolean`<br>
+Default: `true`
+
+Print the file count.
 
 ##### logger(message)
 
