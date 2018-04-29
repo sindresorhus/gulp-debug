@@ -1,30 +1,33 @@
 import fs from 'fs';
 import path from 'path';
 import test from 'ava';
-import sinon from 'sinon';
-import gutil from 'gulp-util';
-import proxyquire from 'proxyquire';
+import Vinyl from 'vinyl';
 import stripAnsi from 'strip-ansi';
 import pEvent from 'p-event';
+import debug from '.';
 
-const gutilStub = {
-	log() {
-		// Uncomment the next line to see the log messages written by `gulp-debug` during test
-		// (by default they are swallowed by the sinon stub replacing the log method)
-		// gutil.log.apply(gutil.log, arguments);
+const logInspect = {
+	messages: [],
+	logger(msg) {
+		logInspect.messages.push(stripAnsi(msg));
+	},
+	get notCalled() {
+		return this.messages.length === 0;
+	},
+	get firstMessage() {
+		return this.messages[0];
+	},
+	get lastMessage() {
+		return this.messages[this.messages.length - 1];
 	}
 };
-
-const debug = proxyquire('.', {
-	'gulp-util': gutilStub
-});
 
 let file;
 
 test.beforeEach(() => {
-	sinon.spy(gutilStub, 'log');
+	logInspect.messages = [];
 
-	file = new gutil.File({
+	file = new Vinyl({
 		cwd: __dirname,
 		base: __dirname,
 		path: path.join(__dirname, 'foo.js'),
@@ -33,39 +36,47 @@ test.beforeEach(() => {
 	});
 });
 
-test.afterEach(() => {
-	gutilStub.log.restore();
-});
-
 test('output debug info', async t => {
-	const stream = debug({title: 'unicorn:'});
+	const stream = debug({
+		logger: logInspect.logger,
+		title: 'unicorn:'
+	});
 	const finish = pEvent(stream, 'finish');
 	stream.end(file);
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.firstCall.args[0]).split('\n')[0], 'unicorn: foo.js');
+	t.is(logInspect.firstMessage, 'unicorn: foo.js');
 });
 
 test('output singular item count', async t => {
-	const stream = debug({title: 'unicorn:'});
+	const stream = debug({
+		logger: logInspect.logger,
+		title: 'unicorn:'
+	});
 	const finish = pEvent(stream, 'finish');
 	stream.end(file);
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
+	t.is(logInspect.lastMessage, 'unicorn: 1 item');
 });
 
 test('output zero item count', async t => {
-	const stream = debug({title: 'unicorn:'});
+	const stream = debug({
+		logger: logInspect.logger,
+		title: 'unicorn:'
+	});
 	const finish = pEvent(stream, 'finish');
 	stream.end();
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 0 items');
+	t.is(logInspect.lastMessage, 'unicorn: 0 items');
 });
 
 test('output plural item count', async t => {
-	const stream = debug({title: 'unicorn:'});
+	const stream = debug({
+		logger: logInspect.logger,
+		title: 'unicorn:'
+	});
 	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
@@ -74,24 +85,34 @@ test('output plural item count', async t => {
 
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
+	t.is(logInspect.lastMessage, 'unicorn: 2 items');
 });
 
 test('do not output file names when `showFiles` is false', async t => {
 	const stream = debug({
+		logger: logInspect.logger,
 		title: 'unicorn:',
 		showFiles: false
 	});
 	const finish = pEvent(stream, 'finish');
 
 	stream.write(file, () => {
-		t.true(gutilStub.log.notCalled);
+		t.true(logInspect.notCalled);
 		stream.end();
 	});
 
 	await finish;
 
-	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
+	t.is(logInspect.lastMessage, 'unicorn: 1 item');
+});
+
+test('using the default logger', async t => {
+	const stream = debug();
+	const finish = pEvent(stream, 'finish');
+	stream.end(file);
+	await finish;
+
+	t.pass();
 });
 
 test('do not output count when `showCount` is false', async t => {

@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const gutil = require('gulp-util');
+const fancyLog = require('fancy-log');
 const through = require('through2');
 const tildify = require('tildify');
 const stringifyObject = require('stringify-object');
@@ -9,44 +9,46 @@ const plur = require('plur');
 
 const prop = chalk.blue;
 
-module.exports = opts => {
-	opts = Object.assign({
+module.exports = options => {
+	options = Object.assign({
+		logger: fancyLog,
 		title: 'gulp-debug:',
 		minimal: true,
 		showFiles: true,
 		showCount: true
-	}, opts);
+	}, options);
 
 	if (process.argv.indexOf('--verbose') !== -1) {
-		opts.verbose = true;
-		opts.minimal = false;
-		opts.showFiles = true;
-		opts.showCount = true;
+		options.verbose = true;
+		options.minimal = false;
+		options.showFiles = true;
+    options.showCount = true;
 	}
 
 	let count = 0;
 
 	return through.obj((file, enc, cb) => {
-		if (opts.showFiles) {
+		if (options.showFiles) {
 			const full =
 				'\n' +
 				(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
 				(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
 				(file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
-				(file.stat && opts.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
+				(file.stat && options.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
 				'\n';
 
-			const output = opts.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
+			const output = options.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
-			gutil.log(opts.title + ' ' + output);
+			options.logger(options.title + ' ' + output);
 		}
 
 		count++;
 		cb(null, file);
 	}, cb => {
 		if (opts.showCount) {
-			gutil.log(opts.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+			options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		}
+
 		cb();
 	});
 };

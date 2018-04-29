@@ -32,6 +32,8 @@ gulp.task('default', () =>
 
 #### options
 
+Type: `Object`
+
 ##### title
 
 Type: `string`<br>
@@ -61,6 +63,13 @@ Type: `boolean`<br>
 Default: `true`
 
 Print the file count.
+
+##### logger(message)
+
+Type: `Function`<br>
+Default: [`fancy-log`](https://github.com/js-cli/fancy-log)
+
+Provide your own logging utility in place of [fancy-log](https://github.com/js-cli/fancy-log). The message is passed as a string in the first argument. Note that [ANSI colors](https://github.com/chalk/chalk) may be used in the message.
 
 
 ## License
