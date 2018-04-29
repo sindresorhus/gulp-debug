@@ -18,7 +18,7 @@ module.exports = options => {
 		showCount: true
 	}, options);
 
-	if (process.argv.indexOf('--verbose') !== -1) {
+	if (process.argv.includes('--verbose')) {
 		options.verbose = true;
 		options.minimal = false;
 		options.showFiles = true;
