@@ -77,7 +77,7 @@ test('output plural item count', async t => {
 	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 2 items');
 });
 
-test('not output file names when `showFiles` is false.', async t => {
+test('do not output file names when `showFiles` is false', async t => {
 	const stream = debug({
 		title: 'unicorn:',
 		showFiles: false
@@ -94,7 +94,7 @@ test('not output file names when `showFiles` is false.', async t => {
 	t.is(stripAnsi(gutilStub.log.lastCall.args[0]).split('\n')[0], 'unicorn: 1 item');
 });
 
-test('not output count when `showCount` is false.', async t => {
+test('do not output count when `showCount` is false', async t => {
 	const stream = debug({
 		title: 'unicorn:',
 		showCount: false
