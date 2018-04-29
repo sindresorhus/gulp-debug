@@ -11,6 +11,7 @@ const prop = chalk.blue;
 
 module.exports = options => {
 	options = Object.assign({
+		logger: fancyLog,
 		title: 'gulp-debug:',
 		minimal: true,
 		showFiles: true
@@ -36,16 +37,13 @@ module.exports = options => {
 
 			const output = options.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
 
-			module.exports._log(options.title + ' ' + output);
+			options.logger(options.title + ' ' + output);
 		}
 
 		count++;
 		cb(null, file);
 	}, cb => {
-		module.exports._log(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+		options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		cb();
 	});
 };
-
-// Internal: Log function used by gulp-debug exposed for testing
-module.exports._log = fancyLog;
