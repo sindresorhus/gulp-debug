@@ -22,7 +22,7 @@ module.exports = options => {
 		options.verbose = true;
 		options.minimal = false;
 		options.showFiles = true;
-    options.showCount = true;
+		options.showCount = true;
 	}
 
 	let count = 0;
