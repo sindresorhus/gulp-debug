@@ -1,15 +1,19 @@
-import fs from 'fs';
-import path from 'path';
+import {Buffer} from 'node:buffer';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import Vinyl from 'vinyl';
 import stripAnsi from 'strip-ansi';
-import pEvent from 'p-event';
-import debug from '.';
+import {pEvent} from 'p-event';
+import debug from './index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const logInspect = {
 	messages: [],
-	logger(msg) {
-		logInspect.messages.push(stripAnsi(msg));
+	logger(message) {
+		logInspect.messages.push(stripAnsi(message));
 	},
 	get notCalled() {
 		return this.messages.length === 0;
@@ -18,8 +22,8 @@ const logInspect = {
 		return this.messages[0];
 	},
 	get lastMessage() {
-		return this.messages[this.messages.length - 1];
-	}
+		return this.messages.at(-1);
+	},
 };
 
 let file;
@@ -32,14 +36,14 @@ test.beforeEach(() => {
 		base: __dirname,
 		path: path.join(__dirname, 'foo.js'),
 		stat: fs.statSync('test.js'),
-		contents: Buffer.from('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.')
+		contents: Buffer.from('Lorem ipsum dolor sit amet, consectetuer adipiscing elit.'),
 	});
 });
 
 test('output debug info', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
-		title: 'unicorn:'
+		title: 'unicorn:',
 	});
 	const finish = pEvent(stream, 'finish');
 	stream.end(file);
@@ -51,7 +55,7 @@ test('output debug info', async t => {
 test('output singular item count', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
-		title: 'unicorn:'
+		title: 'unicorn:',
 	});
 	const finish = pEvent(stream, 'finish');
 	stream.end(file);
@@ -63,7 +67,7 @@ test('output singular item count', async t => {
 test('output zero item count', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
-		title: 'unicorn:'
+		title: 'unicorn:',
 	});
 	const finish = pEvent(stream, 'finish');
 	stream.end();
@@ -75,7 +79,7 @@ test('output zero item count', async t => {
 test('output plural item count', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
-		title: 'unicorn:'
+		title: 'unicorn:',
 	});
 	const finish = pEvent(stream, 'finish');
 
@@ -92,7 +96,7 @@ test('do not output file names when `showFiles` is false', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
 		title: 'unicorn:',
-		showFiles: false
+		showFiles: false,
 	});
 	const finish = pEvent(stream, 'finish');
 
@@ -119,7 +123,7 @@ test('do not output count when `showCount` is false', async t => {
 	const stream = debug({
 		logger: logInspect.logger,
 		title: 'unicorn:',
-		showCount: false
+		showCount: false,
 	});
 	const finish = pEvent(stream, 'finish');
 

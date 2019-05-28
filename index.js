@@ -1,22 +1,22 @@
-'use strict';
-const path = require('path');
-const fancyLog = require('fancy-log');
-const through = require('through2');
-const tildify = require('tildify');
-const stringifyObject = require('stringify-object');
-const chalk = require('chalk');
-const plur = require('plur');
+import process from 'node:process';
+import path from 'node:path';
+import tildify from 'tildify';
+import stringifyObject from 'stringify-object';
+import chalk from 'chalk';
+import plur from 'plur';
+import {gulpPlugin} from 'gulp-plugin-extras';
 
-const prop = chalk.blue;
+const styleProperty = chalk.blue;
 
-module.exports = options => {
-	options = Object.assign({
-		logger: fancyLog,
+export default function gulpDebug(options) {
+	options = {
+		logger: console.log,
 		title: 'gulp-debug:',
 		minimal: true,
 		showFiles: true,
-		showCount: true
-	}, options);
+		showCount: true,
+		...options,
+	};
 
 	if (process.argv.includes('--verbose')) {
 		options.verbose = true;
@@ -27,28 +27,30 @@ module.exports = options => {
 
 	let count = 0;
 
-	return through.obj((file, enc, cb) => {
+	return gulpPlugin('gulp-debug', file => {
 		if (options.showFiles) {
-			const full =
-				'\n' +
-				(file.cwd ? 'cwd:   ' + prop(tildify(file.cwd)) : '') +
-				(file.base ? '\nbase:  ' + prop(tildify(file.base)) : '') +
-				(file.path ? '\npath:  ' + prop(tildify(file.path)) : '') +
-				(file.stat && options.verbose ? '\nstat:  ' + prop(stringifyObject(file.stat, {indent: '       '}).replace(/[{}]/g, '').trim()) : '') +
-				'\n';
+			const full
+				= '\n'
+				+ (file.cwd ? 'cwd:   ' + styleProperty(tildify(file.cwd)) : '')
+				+ (file.base ? '\nbase:  ' + styleProperty(tildify(file.base)) : '')
+				+ (file.path ? '\npath:  ' + styleProperty(tildify(file.path)) : '')
+				+ (file.stat && options.verbose ? '\nstat:  ' + styleProperty(stringifyObject(file.stat, {indent: '       '}).replaceAll(/[{}]/g, '').trim()) : '')
+				+ '\n';
 
-			const output = options.minimal ? prop(path.relative(process.cwd(), file.path)) : full;
+			const output = options.minimal ? styleProperty(path.relative(process.cwd(), file.path)) : full;
 
 			options.logger(options.title + ' ' + output);
 		}
 
 		count++;
-		cb(null, file);
-	}, cb => {
-		if (options.showCount) {
-			options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
-		}
 
-		cb();
+		return file;
+	}, {
+		supportsDirectories: true,
+		async * onFinish() { // eslint-disable-line require-yield
+			if (options.showCount) {
+				options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
+			}
+		},
 	});
-};
+}

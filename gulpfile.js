@@ -1,8 +1,7 @@
-'use strict';
-const gulp = require('gulp');
-const debug = require('.');
+import gulp from 'gulp';
+import debug from './index.js';
 
-gulp.task('default', () =>
-	gulp.src('*')
-		.pipe(debug())
-);
+export default function main() {
+	return gulp.src('*')
+		.pipe(debug());
+}
