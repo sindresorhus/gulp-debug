@@ -2,7 +2,7 @@
 const gulp = require('gulp');
 const debug = require('.');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('*')
 		.pipe(debug())
 );

@@ -10,13 +10,14 @@ const plur = require('plur');
 const prop = chalk.blue;
 
 module.exports = options => {
-	options = Object.assign({
+	options = {
 		logger: fancyLog,
 		title: 'gulp-debug:',
 		minimal: true,
 		showFiles: true,
-		showCount: true
-	}, options);
+		showCount: true,
+		...options
+	};
 
 	if (process.argv.includes('--verbose')) {
 		options.verbose = true;
@@ -27,7 +28,7 @@ module.exports = options => {
 
 	let count = 0;
 
-	return through.obj((file, enc, cb) => {
+	return through.obj((file, encoding, callback) => {
 		if (options.showFiles) {
 			const full =
 				'\n' +
@@ -43,12 +44,12 @@ module.exports = options => {
 		}
 
 		count++;
-		cb(null, file);
-	}, cb => {
+		callback(null, file);
+	}, callback => {
 		if (options.showCount) {
 			options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
 		}
 
-		cb();
+		callback();
 	});
 };

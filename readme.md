@@ -18,7 +18,7 @@ $ npm install --save-dev gulp-debug
 const gulp = require('gulp');
 const debug = require('gulp-debug');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('foo.js')
 		.pipe(debug({title: 'unicorn:'}))
 		.pipe(gulp.dest('dist'))
@@ -28,11 +28,11 @@ gulp.task('default', () =>
 
 ## API
 
-### debug([options])
+### debug(options?)
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### title
 
@@ -70,8 +70,3 @@ Type: `Function`<br>
 Default: [`fancy-log`](https://github.com/js-cli/fancy-log)
 
 Provide your own logging utility in place of [fancy-log](https://github.com/js-cli/fancy-log). The message is passed as a string in the first argument. Note that [ANSI colors](https://github.com/chalk/chalk) may be used in the message.
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)
