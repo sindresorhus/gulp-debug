@@ -48,6 +48,11 @@
 	"peerDependencies": {
 		"gulp": ">=4"
 	},
+	"peerDependenciesMeta": {
+		"gulp": {
+			"optional": true
+		}
+	},
 	"ava": {
 		"serial": true
 	}
