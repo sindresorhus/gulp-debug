@@ -1,4 +1,4 @@
-# gulp-debug [![Build Status](https://travis-ci.com/sindresorhus/gulp-debug.svg?branch=master)](https://travis-ci.com/sindresorhus/gulp-debug)
+# gulp-debug
 
 > Debug [Vinyl](https://github.com/gulpjs/vinyl) file streams to see what files are run through your Gulp pipeline
 
