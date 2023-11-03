@@ -46,7 +46,7 @@ export default function gulpDebug(options) {
 
 		return file;
 	}, {
-		supportsDirectories: true,
+		supportsAnyType: true,
 		async * onFinish() { // eslint-disable-line require-yield
 			if (options.showCount) {
 				options.logger(options.title + ' ' + chalk.green(count + ' ' + plur('item', count)));
