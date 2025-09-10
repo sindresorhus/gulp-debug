@@ -43,7 +43,7 @@ Give it a custom title so it's possible to distinguish the output of multiple in
 Type: `boolean`\
 Default: `true`
 
-By default only relative paths are shown. Turn off minimal mode to also show `cwd`, `base`, `path`.
+By default only file paths relative to the current working directory are shown. Turn off minimal mode to also show `cwd`, `base`, `path`.
 
 The [`stat` property](https://nodejs.org/api/fs.html#fs_class_fs_stats) will be shown when you run gulp in verbose mode: `gulp --verbose`.
 

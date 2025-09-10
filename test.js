@@ -135,3 +135,4 @@ test('do not output count when `showCount` is false', async t => {
 
 	t.not(logInspect.lastMessage, 'unicorn: 1 item');
 });
+
